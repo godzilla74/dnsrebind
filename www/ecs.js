@@ -1,12 +1,15 @@
 function rebind_cb() {
   var meta;
   for(var i = 0; i < 600; ++i) {
-      var req = new XMLHttpRequest();
-      req.open('GET', 'http://' + document.domain + '/wait', false);
-      req.send();
-      meta = get('http://' + document.domain + '/v2/metadata');
-      if(meta != 'still the same host')
-      	break;
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function() {
+      path = 'http://' + document.domain + '/v2/metadata';
+      xhr.open("GET",path,false);
+      xhr.send();
+
+      xhr.onload = function() {
+        log(`Response: ${xhr.status}: ${xhr.response}`);
+      }
+    }
   }
-  log('Meta: ' + meta);
 }
